@@ -6,21 +6,21 @@
 #define PING_IN         7
 #define PING_OUT        8
 
+using std::pair;
+  
 Servo wheel_1, wheel_2, ping_servo;
 
 typedef long length;
 typedef short pos;
 
-const bool DEV = true;
-
 pos left_pos = 0;
 pos right_pos = 0;
 pos ping_servo_pos = 0;
+int count = 0;
+
+const long measurements[400];
 
 void setup() {
-//  if (DEV) {
-//    Serial.begin(9600);
-//  }
   pinMode(PING_OUT, OUTPUT);
   pinMode(PING_IN, INPUT);
   
@@ -32,7 +32,9 @@ void setup() {
 void loop() {
   wheel_1.write(left_pos = (left_pos + 1) % 180);
   wheel_2.write(right_pos = (right_pos + 1) % 180);
-  ping_servo.write(ping_servo_pos = (ping_servo_pos + 1) % 180);
+  
+  ping_servo_pos = (ping_servo_pos + (400 / 360)) % 360;
+  ping_servo.write(ping_servo_pos);
   
   digitalWrite(PING_OUT, LOW);
   delayMicroseconds(2);
@@ -40,11 +42,8 @@ void loop() {
   delayMicroseconds(5);
   digitalWrite(PING_OUT, LOW);
 
-  const length cm = microsecondsToCentimeters(pulseIn(PING_IN, HIGH));
-  
-  if (DEV) {
-    Serial.println(cm);
-  }
+  measurements[count] = microsecondsToCentimeters(pulseIn(PING_IN, HIGH));
+  count = (count + 1) % 400;
   
   delay(100);
 }
