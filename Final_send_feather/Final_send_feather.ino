@@ -1,12 +1,11 @@
 #include <IRremote.h>
 IRsend irsend;
 
-//setup 
 void setup() {
   Serial.begin(9600);
 }
 
-//sends command from the transmitter
+// Sends command from the transmitter.
 void sendCommand(String code) {
   Serial.println(code);
   
@@ -33,7 +32,7 @@ void sendCommand(String code) {
   }
 }
 
-// using the bot #, pin # and onoroff # and returns a string with all those parts
+// Using the bot #, pin # and onoroff # and returns a string with all those .
 String makeCommand(String bot, String pin, String onoroff){
   return bot + pin + onoroff;
 }
@@ -42,14 +41,14 @@ void loop() {
   if(Serial.available() > 0) {
     String sendarray[6], dataarray[6], data = Serial.readString();
     
-    //puts the data received into an array
+    // Puts the data received into an array.
     for(int i = 0; i < data.length(); ++i) dataarray[i] = String(data.charAt(i));
 
-    //makes individual commands
+    // Makes individual commands.
     int j = 0;
     String pin = " ", toggle = " ";
     
-    //takes from the command data and evaluates the pin and the on or off command
+    // Takes from the command data and evaluates the pin and the on or off command.
     for(int k = 0; k < 6; k++) {
       if(dataarray[k].equals("D")) pin = "D";
       if(dataarray[k].equals("E")) pin = "E";
@@ -75,7 +74,7 @@ void loop() {
       }
     }
     
-    //actually sends the commands written in the array
+    // Actually sends the commands written in the array.
     for(int n = 0; n<6; n++){
       sendCommand(sendarray[n]);
     }
